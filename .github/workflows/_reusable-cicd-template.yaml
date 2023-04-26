@@ -12,6 +12,9 @@ on:
 jobs:
   ecr-build-and-deploy: 
     uses: ./.github/workflows/_reusable-ecr-build-and-push.yaml
+    permissions:
+      id-token: write
+      contents: read
     with:
       ecr-repo-name: test-cicd-repo
       app-path: ./lambdas/hello-world
