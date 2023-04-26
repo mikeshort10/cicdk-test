@@ -12,6 +12,8 @@ jobs:
       ecr-repo-name: test-cicd-repo
       app-path: ./lambdas/hello-world
       environment: prod
+    secrets:
+      AWS_ECR_ROLE: ${{ secrets.AWS_ECR_ROLE }}
   call-cicd:
     needs: ecr-build-and-deploy
     uses: ./.github/workflows/_reusable-cicd-template.yaml
@@ -20,3 +22,5 @@ jobs:
       contents: read
     with:
       environment: prod
+    secrets:
+      AWS_CDK_DEPLOY_ROLE: ${{ secrets.AWS_CDK_DEPLOY_ROLE }}
