@@ -55,4 +55,4 @@ jobs:
           ENVIRONMENT: ${{ inputs.environment == 'prod' && 'latest' || inputs.environment }}
         run: |
           docker build --cache-from $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT .
-          docker push --all-tags $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker push --all-tags $REGISTRY/$REPOSITORY
