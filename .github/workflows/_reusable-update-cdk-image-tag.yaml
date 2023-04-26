@@ -34,6 +34,8 @@ jobs:
           UPDATED_TAG: ${{ inputs.updated-tag }}
           BRANCH: ${{ github.ref_name }}
         run: |
+          git config user.email "deploy@aps.org"
+          git config user.name "Deploy Bot"
           git checkout $BRANCH
           git add cdk.json
           git commit -m "Updated $UPDATED_TAG for $CDK_ENV"
