@@ -1,0 +1,10 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  call-cicd:
+    uses: ./.github/workflows/_reusable-cicd-template.yaml
+    with:
+      environment: prod
+      

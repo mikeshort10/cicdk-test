@@ -1,0 +1,44 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "CDK environment that this will deploy to"
+        required: true
+        type: string
+      region: 
+        description: "AWS Region that this CDK Stack should deploy to"
+        type: string
+        default: us-east-1
+jobs:
+  ecr-build-and-deploy: 
+    uses: ./.github/workflows/_reusable-ecr-build-and-push.yaml
+    with:
+      ecr-repo-name: test-cicd-repo
+      app-path: ./lambdas/hello-world
+      environment: ${{ inputs.environment }}
+  reusable-cicd-job:
+    
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with: 
+        node-version: "18"
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ inputs.region }}
+    - name: Install
+      run: npm ci
+    - name: Linting
+      run: npm run lint
+    - name: Unit Tests
+      run: npm run test:unit
+    - name: Synth
+      env:
+        CDK_ENV: ${{ inputs.environment }}
+      run: npm cdk synth --context env=$CDK_ENV
+    - name: Deploy
+      run: npm cdk deploy --require-approval=never

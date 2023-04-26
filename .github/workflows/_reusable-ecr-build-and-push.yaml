@@ -1,0 +1,52 @@
+on:
+  workflow_call:
+    inputs:
+      ecr-repo-name:
+        required: true
+        type: string
+      app-path:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      # helm-value-maps:
+      #   required: false
+      #   type: string
+jobs:
+  reuseable-ecr-build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            app-path:
+              - "${{inputs.app-path}}/**"  
+      - name: Configure AWS Credentials
+        if: steps.filter.outputs.app-path == 'true'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ECR_ROLE }}
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        if: steps.filter.outputs.app-path == 'true'
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag, and push docker image to Amazon ECR
+        if: steps.filter.outputs.app-path == 'true'
+        working-directory: "${{inputs.app-path}}"
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{inputs.ecr-repo-name}}
+          IMAGE_TAG: ${{ github.sha }}
+          ENVIRONMENT: ${{ inputs.environment == "prod" && "latest" || inputs.environment }}
+        run: |
+          docker build --cache-from $REGISTRY/$REPOSITORY:latest -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
