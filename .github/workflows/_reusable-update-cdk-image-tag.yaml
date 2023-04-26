@@ -1,0 +1,41 @@
+on: 
+  workflow_call:
+    inputs:
+      environment:
+        description: "CDK environment key, which contains the config in the cdk.json"
+        type: string
+        required: true
+      image-tag-key:
+        description: "CDK context key to write the tag to within .context.$environment"
+        type: string
+        required: true
+      updated-tag:
+        description: "Updated ECR image tag, if one exists"
+        type: string
+        required: false
+jobs:
+  update-cdk-image-tag-for-env:
+    if: ${{ inputs.updated-tag }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Update CDK context
+        env:
+          CDK_ENV: ${{ inputs.environment }}
+          TAG_KEY: ${{ inputs.image-tag-key }}
+          UPDATED_TAG: ${{ inputs.updated-tag }}
+        run: |
+          echo "$( jq '.context[$CDK_ENV][$TAG_KEY] = $UPDATED_TAG' --arg CDK_ENV "$CDK_ENV" --arg TAG_KEY "$TAG_KEY" --arg UPDATED_TAG "$UPDATED_TAG" cdk.json )" > cdk.json 
+      - name: Commit and push
+        env:
+          CDK_ENV: ${{ inputs.environment }}
+          UPDATED_TAG: ${{ inputs.updated-tag }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git checkout $BRANCH
+          git add cdk.json
+          git commit -m "Updated $UPDATED_TAG for $CDK_ENV"
+          git push
+          
+

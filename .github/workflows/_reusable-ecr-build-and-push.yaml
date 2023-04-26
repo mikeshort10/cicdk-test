@@ -19,12 +19,18 @@ on:
       AWS_ECR_ROLE:
         description: "AWS role for GHA to push/pull from ECR"
         required: true
+    outputs:
+      updated-tag: 
+        description: "New tag for the ECR image, if one was created"
+        value: ${{ jobs.reuseable-ecr-build-and-push.outputs.updated-tag }}
 jobs:
   reuseable-ecr-build-and-push:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
+    outputs:
+      updated-tag: ${{ steps.build-and-push.outputs.updated-tag }}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -47,6 +53,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       - name: Build, tag, and push docker image to Amazon ECR
         if: steps.filter.outputs.app-path == 'true'
+        id: build-and-push
         working-directory: "${{inputs.app-path}}"
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -56,3 +63,5 @@ jobs:
         run: |
           docker build --cache-from $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT .
           docker push --all-tags $REGISTRY/$REPOSITORY
+          echo "updated-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+            

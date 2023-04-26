@@ -14,6 +14,12 @@ jobs:
       environment: prod
     secrets:
       AWS_ECR_ROLE: ${{ secrets.AWS_ECR_ROLE }}
+  update-cdk-context:
+    uses: ./.github/workflows/_reusable-update-cdk-image-tag.yaml
+    with:
+      environment: prod
+      image-tag-key: lambda
+      updated-tag: ${{ jobs.ecr-build-and-deploy.outputs.updated-tag }}
   call-cicd:
     needs: ecr-build-and-deploy
     uses: ./.github/workflows/_reusable-cicd-template.yaml
