@@ -5,6 +5,8 @@ on:
 jobs:
   call-cicd:
     uses: ./.github/workflows/_reusable-cicd-template.yaml
+    permissions:
+      id-token: write
+      contents: read
     with:
       environment: prod
-      
