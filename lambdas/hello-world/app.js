@@ -1,4 +1,4 @@
-export const handler = (event) => {
+module.exports.handler = (event) => {
   console.log(event);
   return {
     statusCode: 200,
