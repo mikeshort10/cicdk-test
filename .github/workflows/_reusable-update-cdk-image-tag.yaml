@@ -13,12 +13,18 @@ on:
         description: "Updated ECR image tag, if one exists"
         type: string
         required: false
+    secrets:
+      repo-write-token:
+        description: "GitHub PAT with write permissions to the repo"
+        required: true
 jobs:
   update-cdk-image-tag-for-env:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.repo-write-token }}
       - name: Update CDK context
         if: ${{ inputs.updated-tag }}
         env:

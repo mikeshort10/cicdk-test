@@ -21,6 +21,8 @@ jobs:
       environment: prod
       image-tag-key: lambda
       updated-tag: ${{ needs.ecr-build-and-deploy.outputs.updated-tag }}
+    secrets:
+      repo-write-token: ${{ secrets.GH_WRITE_TOKEN }}
   call-cicd:
     needs: update-cdk-context
     uses: ./.github/workflows/_reusable-cicd-template.yaml
