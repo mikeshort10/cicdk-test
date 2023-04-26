@@ -33,7 +33,10 @@ export class TestCicdCdkStack extends cdk.Stack {
       this,
       config.namespace("lambda"),
       {
-        code: lambda.DockerImageCode.fromEcr(lambdaRepo),
+        code: lambda.DockerImageCode.fromEcr(lambdaRepo, {
+          tagOrDigest:
+            config.environment === "prod" ? "latest" : config.environment,
+        }),
       }
     );
 
