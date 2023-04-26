@@ -8,11 +8,13 @@ on:
         required: true
         type: string
       environment:
+        description: "CDK environment that this will deploy to"
         required: true
         type: string
-      # helm-value-maps:
-      #   required: false
-      #   type: string
+      region: 
+        description: "AWS Region that this CDK Stack should deploy to"
+        type: string
+        default: us-east-1
 jobs:
   reuseable-ecr-build-and-push:
     runs-on: ubuntu-latest
@@ -34,7 +36,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_ECR_ROLE }}
-          aws-region: us-east-1
+          aws-region: ${{ inputs.region }}
       - name: Login to Amazon ECR
         if: steps.filter.outputs.app-path == 'true'
         id: login-ecr
