@@ -39,10 +39,10 @@ jobs:
       with:
         role-to-assume: ${{ secrets.AWS_CDK_DEPLOY_ROLE }}
         aws-region: ${{ inputs.region }}
-    - name: Synth
+    - name: Synth and Deploy
       env:
         CDK_ENV: ${{ inputs.environment }}
         LAMBDA_REPO_NAME: ${{ inputs.ecr-repo-name }}
-      run: npm run cdk synth -- --context env=$CDK_ENV --context lambdaRepoName=$LAMBDA_REPO_NAME
-    - name: Deploy
-      run: npm run cdk deploy -- --require-approval=never --context env=$CDK_ENV --context lambdaRepoName=$LAMBDA_REPO_NAME
+      run: |
+       npm run cdk synth -- --context env=$CDK_ENV --context lambdaRepoName=$LAMBDA_REPO_NAME
+       npm run cdk deploy -- --require-approval=never --context env=$CDK_ENV --context lambdaRepoName=$LAMBDA_REPO_NAME
