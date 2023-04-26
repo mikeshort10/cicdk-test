@@ -46,6 +46,9 @@
     "@aws-cdk/aws-ec2:launchTemplateDefaultUserData": true,
     "@aws-cdk/aws-secretsmanager:useAttachedSecretResourcePolicyForSecretTargetAttachments": true,
     "@aws-cdk/aws-redshift:columnId": true,
-    "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true
+    "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true,
+    "prod": {
+      "lambda": "09153c04e6217b14e79c6d48c270f8f5da03d56e"
+    }
   }
 }
