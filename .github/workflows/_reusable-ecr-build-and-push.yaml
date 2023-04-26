@@ -50,9 +50,9 @@ jobs:
         working-directory: "${{inputs.app-path}}"
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{inputs.ecr-repo-name}}
+          REPOSITORY: ${{ inputs.ecr-repo-name }}
           IMAGE_TAG: ${{ github.sha }}
           ENVIRONMENT: ${{ inputs.environment == 'prod' && 'latest' || inputs.environment }}
         run: |
-          docker build --cache-from $REGISTRY/$REPOSITORY:latest -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT .
+          docker build --cache-from $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
