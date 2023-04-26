@@ -9,6 +9,11 @@ on:
         description: "AWS Region that this CDK Stack should deploy to"
         type: string
         default: us-east-1
+    secrets:
+      AWS_CDK_DEPLOY_ROLE:
+        description: "AWS role for GHA to deploy CDK"
+        required: true
+
 jobs:
   reusable-cicd-job:
     runs-on: ubuntu-latest

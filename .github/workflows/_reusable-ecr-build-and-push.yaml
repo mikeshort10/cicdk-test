@@ -15,6 +15,10 @@ on:
         description: "AWS Region that this CDK Stack should deploy to"
         type: string
         default: us-east-1
+    secrets:
+      AWS_ECR_ROLE:
+        description: "AWS role for GHA to push/pull from ECR"
+        required: true
 jobs:
   reuseable-ecr-build-and-push:
     runs-on: ubuntu-latest
