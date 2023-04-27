@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - development
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v3
+      - run: echo "Hello artifact" >> artifact.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: artifact.txt
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: my-artifact
+      - run: cat artifact.txt
+
