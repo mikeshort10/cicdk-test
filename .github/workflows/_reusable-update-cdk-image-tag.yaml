@@ -25,14 +25,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.repo-write-token }}
-      - name: Update CDK context
-        if: ${{ inputs.updated-tag }}
-        env:
-          CDK_ENV: ${{ inputs.environment }}
-          REPO_NAME: ${{ inputs.ecr-repo-name }}
-          UPDATED_TAG: ${{ inputs.updated-tag }}
-        run: |
-          echo "$( jq '.context[$CDK_ENV].lambdas[$REPO_NAME].tag = $UPDATED_TAG' --arg CDK_ENV "$CDK_ENV" --arg REPO_NAME "$REPO_NAME" --arg UPDATED_TAG "$UPDATED_TAG" cdk.json )" > cdk.json 
+      - name: Download cdk.json
+        uses: actions/download-artifact@v3
+        with:
+          name: context
       - name: Commit and push
         if: ${{ inputs.updated-tag }}
         env:

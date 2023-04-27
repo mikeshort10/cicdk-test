@@ -29,8 +29,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    outputs:
-      updated-tag: ${{ steps.build-and-push.outputs.updated-tag }}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -64,4 +62,22 @@ jobs:
           docker build --cache-from $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:latest .
           docker push --all-tags $REGISTRY/$REPOSITORY
           echo "updated-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+      - name: Download context artifact
+        uses: actions/download-artifact@v3
+        with: 
+          name: context
+      - run: ls
+      - name: Update CDK context
+        if: ${{ steps.build-and-push.outputs.updated-tag }}
+        env:
+          CDK_ENV: ${{ inputs.environment }}
+          REPO_NAME: ${{ inputs.ecr-repo-name }}
+          UPDATED_TAG: ${{ steps.build-and-push.outputs.updated-tag }}
+        run: |
+          echo "$( jq '.context[$CDK_ENV].lambdas[$REPO_NAME].tag = $UPDATED_TAG' --arg CDK_ENV "$CDK_ENV" --arg REPO_NAME "$REPO_NAME" --arg UPDATED_TAG "$UPDATED_TAG" cdk.json )" > cdk.json 
+      - name: Upload Context
+        uses: actions/upload-artifact@v3
+        with:
+          name: context
+          path: cdk.json
             

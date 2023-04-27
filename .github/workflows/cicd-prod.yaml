@@ -3,6 +3,13 @@ on:
     branches:
       - main
 jobs:
+  create-context-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/upload-artifact@v3
+        with:
+          name: context
+          path: cdk.json
   ecr-build-and-deploy: 
     uses: ./.github/workflows/_reusable-ecr-build-and-push.yaml
     permissions:
