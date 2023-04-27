@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/_reusable-update-cdk-image-tag.yaml
     with:
       environment: prod
-      image-tag-key: lambda
+      image-tag-key: lambdaTag
       updated-tag: ${{ needs.ecr-build-and-deploy.outputs.updated-tag }}
     secrets:
       repo-write-token: ${{ secrets.GH_WRITE_TOKEN }}
