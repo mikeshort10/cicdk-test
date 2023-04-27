@@ -11,6 +11,7 @@ jobs:
           name: context
           path: cdk.json
   ecr-build-and-deploy: 
+    needs: create-context-artifact
     uses: ./.github/workflows/_reusable-ecr-build-and-push.yaml
     permissions:
       id-token: write
