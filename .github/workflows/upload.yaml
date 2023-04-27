@@ -12,6 +12,8 @@ jobs:
         with:
           name: artifact
           path: artifact.txt
+      - run: ls
+      - run: stat artifact.txt
       - run: echo $TEXT >> artifact.txt
         env:
           TEXT: ${{ inputs.text }}
