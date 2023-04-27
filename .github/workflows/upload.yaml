@@ -12,7 +12,7 @@ jobs:
         with:
           name: artifact
           path: artifact.txt
-      - run: ls
+      - run: ls artifact.txt
       - run: stat artifact.txt
       - run: echo $TEXT >> artifact.txt
         env:
