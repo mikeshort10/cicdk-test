@@ -5,7 +5,7 @@ on:
         description: "CDK environment key, which contains the config in the cdk.json"
         type: string
         required: true
-      image-tag-key:
+      ecr-repo-name:
         description: "CDK context key to write the tag to within .context.$environment"
         type: string
         required: true
@@ -29,10 +29,10 @@ jobs:
         if: ${{ inputs.updated-tag }}
         env:
           CDK_ENV: ${{ inputs.environment }}
-          TAG_KEY: ${{ inputs.image-tag-key }}
+          REPO_NAME: ${{ inputs.ecr-repo-name }}
           UPDATED_TAG: ${{ inputs.updated-tag }}
         run: |
-          echo "$( jq '.context[$CDK_ENV][$TAG_KEY] = $UPDATED_TAG' --arg CDK_ENV "$CDK_ENV" --arg TAG_KEY "$TAG_KEY" --arg UPDATED_TAG "$UPDATED_TAG" cdk.json )" > cdk.json 
+          echo "$( jq '.context[$CDK_ENV].lambdas[$REPO_NAME].tag = $UPDATED_TAG' --arg CDK_ENV "$CDK_ENV" --arg REPO_NAME "$REPO_NAME" --arg UPDATED_TAG "$UPDATED_TAG" cdk.json )" > cdk.json 
       - name: Commit and push
         if: ${{ inputs.updated-tag }}
         env:

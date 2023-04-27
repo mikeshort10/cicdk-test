@@ -11,10 +11,10 @@ export type StackConfig = {
   environment: string;
   namespace: (baseName: string) => string;
   tagResource: TagResource;
-  lambda: {
+  lambdas: {
     repoName: string;
     tag: string;
-  };
+  }[];
 };
 
 export class TestCicdCdkStack extends cdk.Stack {
@@ -26,22 +26,24 @@ export class TestCicdCdkStack extends cdk.Stack {
   ) {
     super(scope, id, props);
 
-    const lambdaRepo = cdk.aws_ecr.Repository.fromRepositoryName(
-      this,
-      config.lambda.repoName,
-      config.lambda.repoName
-    );
+    config.lambdas.forEach((lambdaConfig) => {
+      const lambdaRepo = cdk.aws_ecr.Repository.fromRepositoryName(
+        this,
+        lambdaConfig.repoName,
+        lambdaConfig.repoName
+      );
 
-    const lambdaFunction = new lambda.DockerImageFunction(
-      this,
-      config.namespace("lambda"),
-      {
-        code: lambda.DockerImageCode.fromEcr(lambdaRepo, {
-          tagOrDigest: config.lambda.tag,
-        }),
-      }
-    );
+      const lambdaFunction = new lambda.DockerImageFunction(
+        this,
+        config.namespace("lambda"),
+        {
+          code: lambda.DockerImageCode.fromEcr(lambdaRepo, {
+            tagOrDigest: lambdaConfig.tag,
+          }),
+        }
+      );
 
-    config.tagResource(lambdaFunction, { PersistentDataClass: "ephemeral" });
+      config.tagResource(lambdaFunction, { PersistentDataClass: "ephemeral" });
+    });
   }
 }

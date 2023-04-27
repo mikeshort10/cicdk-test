@@ -8,8 +8,10 @@ import {
 } from "../lib/test-cicd-cdk-stack";
 import { z } from "zod";
 
+const lambdaConfigShape = z.object({ tag: z.string() });
+
 const contextShape = z.object({
-  lambdaTag: z.string(),
+  lambdas: z.record(z.string(), lambdaConfigShape),
 });
 
 type Environment = "devel" | "alpha" | "prod";
@@ -58,14 +60,20 @@ if (context.success === false) {
   throw Error(`Invalid context in cdk.json for ${env}: ${context}`);
 }
 
+const lambdas = Object.entries(context.data.lambdas).map(
+  ([repoName, config]) => {
+    return {
+      repoName,
+      ...config,
+    };
+  }
+);
+
 const config: StackConfig = {
   environment: env,
   namespace: $namespace("cicdk-test", env),
   tagResource: $tagResource({ Environment: env }),
-  lambda: {
-    repoName: lambdaRepoName,
-    tag: context.data.lambdaTag,
-  },
+  lambdas: lambdas,
 };
 
 new TestCicdCdkStack(app, "TestCicdCdkStack", config, {
