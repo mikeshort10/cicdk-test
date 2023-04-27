@@ -12,7 +12,7 @@ jobs:
         with:
           name: artifact
           path: artifact.txt
-      - run: echo $TEXT >> artifact.txt
+      - run: echo $TEXT # >> artifact.txt
         env:
           TEXT: ${{ inputs.text }}
       - uses: actions/upload-artifact@v3
