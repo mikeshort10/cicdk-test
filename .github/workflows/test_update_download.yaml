@@ -12,6 +12,7 @@ jobs:
           name: artifact
           path: artifact.txt
   uploads:
+    needs: create-artifact
     uses: ./.github/workflows/upload.yaml
     strategy:
       matrix:
