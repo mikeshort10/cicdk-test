@@ -11,7 +11,10 @@ export type StackConfig = {
   environment: string;
   namespace: (baseName: string) => string;
   tagResource: TagResource;
-  lambdaRepoName: string;
+  lambda: {
+    repoName: string;
+    tag: string;
+  };
 };
 
 export class TestCicdCdkStack extends cdk.Stack {
@@ -25,8 +28,8 @@ export class TestCicdCdkStack extends cdk.Stack {
 
     const lambdaRepo = cdk.aws_ecr.Repository.fromRepositoryName(
       this,
-      config.lambdaRepoName,
-      config.lambdaRepoName
+      config.lambda.repoName,
+      config.lambda.repoName
     );
 
     const lambdaFunction = new lambda.DockerImageFunction(
@@ -34,8 +37,7 @@ export class TestCicdCdkStack extends cdk.Stack {
       config.namespace("lambda"),
       {
         code: lambda.DockerImageCode.fromEcr(lambdaRepo, {
-          tagOrDigest:
-            config.environment === "prod" ? "latest" : config.environment,
+          tagOrDigest: config.lambda.tag,
         }),
       }
     );

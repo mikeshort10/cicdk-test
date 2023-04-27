@@ -6,6 +6,11 @@ import {
   TagResource,
   TestCicdCdkStack,
 } from "../lib/test-cicd-cdk-stack";
+import { z } from "zod";
+
+const contextShape = z.object({
+  lambdaTag: z.string(),
+});
 
 type Environment = "devel" | "alpha" | "prod";
 
@@ -47,11 +52,20 @@ try {
   throw Error("Did not receive lambdaRepoName from context");
 }
 
+const context = contextShape.safeParse(app.node.tryGetContext(env));
+
+if (context.success === false) {
+  throw Error(`Invalid context in cdk.json for ${env}: ${context}`);
+}
+
 const config: StackConfig = {
   environment: env,
   namespace: $namespace("cicdk-test", env),
   tagResource: $tagResource({ Environment: env }),
-  lambdaRepoName: lambdaRepoName,
+  lambda: {
+    repoName: lambdaRepoName,
+    tag: context.data.lambdaTag,
+  },
 };
 
 new TestCicdCdkStack(app, "TestCicdCdkStack", config, {
