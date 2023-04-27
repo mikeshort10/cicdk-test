@@ -14,6 +14,8 @@ jobs:
   uploads:
     needs: create-artifact
     uses: ./.github/workflows/upload.yaml
+    with:
+      text: ${{ matrix.text }}
     strategy:
       matrix:
         text: [A, B, C]
