@@ -59,9 +59,9 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ inputs.ecr-repo-name }}
           IMAGE_TAG: ${{ github.sha }}
-          ENVIRONMENT: ${{ inputs.environment == 'prod' && 'latest' || inputs.environment }}
+          ENVIRONMENT: ${{ inputs.environment }}
         run: |
-          docker build --cache-from $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT .
+          docker build --cache-from $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:latest .
           docker push --all-tags $REGISTRY/$REPOSITORY
           echo "updated-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
             
