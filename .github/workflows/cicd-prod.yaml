@@ -17,10 +17,17 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    strategy:
+      matrix:
+        include:
+        - ecr-repo-name: test-cicd-lambda
+          app-path: ./lambdas/hello-world
+        - ecr-repo-name: test-cicd-lambda-2
+          app-path: ./lambdas/hello-second
     with:
-      ecr-repo-name: test-cicd-lambda
-      app-path: ./lambdas/hello-world
       environment: prod
+      ecr-repo-name: ${{ matrix.ecr-repo-name }}
+      app-path: ${{ matrix.app-path }}
     secrets:
       AWS_ECR_ROLE: ${{ secrets.AWS_ECR_ROLE }}
   update-cdk-context:
