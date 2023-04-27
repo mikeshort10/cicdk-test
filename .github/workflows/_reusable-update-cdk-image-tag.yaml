@@ -21,7 +21,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: context
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            app-path:
+              - cdk.json 
       - name: Commit and push
+        if: steps.filter.outputs.app-path == 'true'
         env:
           CDK_ENV: ${{ inputs.environment }}
           BRANCH: ${{ github.ref_name }}
