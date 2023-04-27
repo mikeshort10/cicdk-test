@@ -6,7 +6,7 @@ jobs:
   create-artifact:
     runs-on: ubuntu-latest
     steps: 
-      - run: touch artifact.txt
+      - run: echo "Hello " >> artifact.txt
       - uses: actions/upload-artifact@v3
         with:
           name: artifact
