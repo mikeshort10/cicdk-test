@@ -6,7 +6,13 @@ It attempts to replace AWS CodePipeline, which we have found to be much slower, 
 
 Workflow beginning with at least one underscore are Reusable Workflows. Those beginning with a double underscore are more generic and can live at an organizational level. Those beginning with a single underscore configure the others for easier reuse. Finally, workflows without an underscore are actual runs, configured for a given environment.
 
-### Secrets
+### Additional Configuration
+
+#### ECR Repos
+
+ECR repositories need to be created before pushing new lambdas to the workflow, as they cannot be created simply from a push to the namespace.
+
+#### Secrets
 
 This Workflow assumes that you have an OIDC Identity Provider configured in AWS for GitHub. For details on how to set on e up, see [Creating OpenID Connect (OIDC) identity providers](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html) and [Configuring OpenID Connect in Amazon Web Services](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services).
 
