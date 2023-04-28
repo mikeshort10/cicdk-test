@@ -56,9 +56,6 @@ jobs:
     uses: ./.github/workflows/_reusable-cicd-template.yaml
     # If the tag has been updated, it will have been committed in update-cdk-context, rerunning the job, so cancel this one
     if: ${{ needs.ecr-build-and-deploy.outputs.updated-tag == '' }}
-    permissions:
-      id-token: write
-      contents: read
     with:
       environment: ${{ inputs.environment }}
     secrets:
