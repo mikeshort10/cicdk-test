@@ -39,19 +39,12 @@ const $tagResource = (stackTags: StackTags): TagResource => {
 const app = new cdk.App();
 
 let env: "prod" | "alpha" | "devel";
-let lambdaRepoName: string;
 try {
   env = app.node.getContext("env");
 } catch {
   throw Error(
     "You must specify a context: devel, alpha, prod. npm run cdk {{COMMAND}} -- --context env={{CONTEXT}}"
   );
-}
-
-try {
-  lambdaRepoName = app.node.getContext("lambdaRepoName");
-} catch {
-  throw Error("Did not receive lambdaRepoName from context");
 }
 
 const context = contextShape.safeParse(app.node.tryGetContext(env));
