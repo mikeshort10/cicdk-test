@@ -34,6 +34,8 @@ jobs:
       id-token: write
       contents: read
     strategy:
+      # Since these are all writing the same artifact, they need to be run one at a time to avoid overwriting each other
+      max-parallel: 1
       matrix:
         include:
         - ecr-repo-name: test-cicd-lambda
