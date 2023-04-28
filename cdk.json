@@ -50,7 +50,10 @@
     "prod": {
       "lambdas": {
         "test-cicd-lambda": {
-          "tag": "4e47d6efceb72e690c783161573239ade29a214d"
+          "tag": "be53c9933142e45b92b61ae0a4b70d7aea3356ed"
+        },
+        "test-cicd-lambda-2": {
+          "tag": "be53c9933142e45b92b61ae0a4b70d7aea3356ed"
         }
       }
     }
