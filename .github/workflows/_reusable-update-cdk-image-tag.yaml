@@ -20,16 +20,14 @@ jobs:
       - name: Download cdk.json
         uses: actions/download-artifact@v3
         with:
+
           name: context
-      - uses: dorny/paths-filter@v2
+      - name: Diff cdk.json
         id: filter
-        with:
-          base: ${{ github.ref }}
-          filters: |
-            app-path:
-              - cdk.json 
+        run: |
+          git diff HEAD --quiet || echo "new-context=true" >> $GITHUB_OUTPUT 
       - name: Commit and push
-        if: steps.filter.outputs.app-path == 'true'
+        if: steps.filter.outputs.new-context == 'true'
         env:
           CDK_ENV: ${{ inputs.environment }}
           BRANCH: ${{ github.ref_name }}
