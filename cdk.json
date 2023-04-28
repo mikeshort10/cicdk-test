@@ -54,6 +54,9 @@
         },
         "test-cicd-lambda-2": {
           "tag": "aff19271f7aaf3aeaaf706fa1f18e53eece21320"
+        },
+        "test-cicd-lambda-3": {
+          "tag": "ff8e2d597d9e1b00c1133f2242af42fa8dabef0a"
         }
       }
     }
