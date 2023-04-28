@@ -36,11 +36,11 @@ jobs:
         run: |
           echo "latest-image-tag=$( jq '.context[$CDK_ENV].lambdas[$REPO_NAME].tag' --arg CDK_ENV "$CDK_ENV" --arg REPO_NAME "$REPO_NAME" cdk.json )" >> $GITHUB_OUTPUT    
           echo $GITHUB_OUTPUT     
-      - name: Check if Image needs updating
+      - name: Check if Image Needs Updating
         uses: dorny/paths-filter@v2
         id: filter
         with:
-          base: ${{ steps.latest-image-tag.outputs.latest-image-tag }}
+          base: ${{ steps.get-latest-image-tag.outputs.latest-image-tag }}
           filters: |
             app-path:
               - "${{inputs.app-path}}/**"  
@@ -67,7 +67,7 @@ jobs:
           docker build --cache-from $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:$ENVIRONMENT -t $REGISTRY/$REPOSITORY:latest .
           docker push --all-tags $REGISTRY/$REPOSITORY
           echo "updated-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
-      - name: Update CDK context
+      - name: Update CDK Context
         if: steps.filter.outputs.app-path == 'true'
         env:
           CDK_ENV: ${{ inputs.environment }}

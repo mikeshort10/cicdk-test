@@ -16,7 +16,9 @@ on:
       AWS_CDK_DEPLOY_ROLE:
         description: "Role for deploying CDK stacks"
         required: true
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   create-context-artifact:
     runs-on: ubuntu-latest
