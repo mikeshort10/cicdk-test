@@ -14,6 +14,9 @@ on:
       AWS_CDK_DEPLOY_ROLE:
         description: "AWS role for GHA to deploy CDK"
         required: true
+      GH_WRITE_TOKEN:
+        description: "GitHub PAT with write permissions to the repo"
+        required: true
 
 jobs:
   reusable-cicd-job:
@@ -23,6 +26,8 @@ jobs:
       contents: read
     steps:
     - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GH_WRITE_TOKEN }}
     - uses: actions/setup-node@v3
       with: 
         node-version: "18"
@@ -32,12 +37,34 @@ jobs:
       run: npm run lint
     - name: Unit Tests
       run: npm run test:unit
+    - name: Download cdk.json
+      uses: actions/download-artifact@v3
+      with:
+        name: context
+    - name: Diff cdk.json
+      id: filter
+      run: |
+        git diff HEAD --quiet -- cdk.json || echo "new-context=true" >> $GITHUB_OUTPUT 
+    - name: Commit and push
+      if: steps.filter.outputs.new-context == 'true'
+      env:
+        CDK_ENV: ${{ inputs.environment }}
+        BRANCH: ${{ github.ref_name }}
+      run: |
+        git config user.email "deploy@aps.org"
+        git config user.name "Deploy Bot"
+        git checkout $BRANCH
+        git add cdk.json
+        git commit -m "Updated config for $CDK_ENV deployment"
+        git push
     - name: Configure AWS credentials
+      if: steps.filter.outputs.new-context != 'true'
       uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: ${{ secrets.AWS_CDK_DEPLOY_ROLE }}
         aws-region: ${{ inputs.region }}
     - name: Synth and Deploy
+      if: steps.filter.outputs.new-context != 'true'
       env:
         CDK_ENV: ${{ inputs.environment }}
       run: |
