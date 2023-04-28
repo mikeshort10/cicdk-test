@@ -1,4 +1,4 @@
-name: CDK Deploy
+name: "Template: CDK Deploy"
 on:
   workflow_call:
     inputs:
