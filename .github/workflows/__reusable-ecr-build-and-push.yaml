@@ -34,7 +34,7 @@ jobs:
           CDK_ENV: ${{ inputs.environment }}
           REPO_NAME: ${{ inputs.ecr-repo-name }}
         run: |
-          echo "latest-image-tag=$( jq '.context[$CDK_ENV].lambdas[$REPO_NAME].tag' --arg CDK_ENV "$CDK_ENV" --arg REPO_NAME "$REPO_NAME" cdk.json )" >> $GITHUB_OUTPUT    
+          echo "latest-image-tag=$( jq -r '.context[$CDK_ENV].lambdas[$REPO_NAME].tag' --arg CDK_ENV "$CDK_ENV" --arg REPO_NAME "$REPO_NAME" cdk.json )" >> $GITHUB_OUTPUT    
           echo $GITHUB_OUTPUT     
       - name: Check if Image Needs Updating
         uses: dorny/paths-filter@v2
