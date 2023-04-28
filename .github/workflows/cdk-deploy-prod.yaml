@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   cdk-deploy:
-    uses: ./.github/workflows/_reusable-cdk-deploy.yaml
+    uses: .github/workflows/_reusable-cicd.yaml
     with:
       environment: prod
     secrets:
