@@ -46,7 +46,6 @@ jobs:
       id-token: write
       contents: read
     with:
-      ecr-repo-name: test-cicd-lambda
       environment: prod
     secrets:
       AWS_CDK_DEPLOY_ROLE: ${{ secrets.AWS_CDK_DEPLOY_ROLE }}
