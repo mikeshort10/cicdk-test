@@ -72,4 +72,5 @@ jobs:
         with:
           name: context
           path: cdk.json
+          retention-days: 1
             

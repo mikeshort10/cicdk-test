@@ -26,6 +26,7 @@ jobs:
         with:
           name: context
           path: cdk.json
+          retention-days: 1
   ecr-build-and-deploy: 
     needs: create-context-artifact
     uses: ./.github/workflows/__reusable-ecr-build-and-push.yaml
