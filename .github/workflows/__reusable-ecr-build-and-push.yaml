@@ -1,4 +1,4 @@
-name: ECR Build/Push
+name: "Template: ECR Build/Push"
 on:
   workflow_call:
     inputs:
@@ -35,12 +35,12 @@ jobs:
           REPO_NAME: ${{ inputs.ecr-repo-name }}
         run: |
           echo "latest-image-tag=$( jq -r '.context[$CDK_ENV].lambdas[$REPO_NAME].tag' --arg CDK_ENV "$CDK_ENV" --arg REPO_NAME "$REPO_NAME" cdk.json )" >> $GITHUB_OUTPUT    
-          echo $GITHUB_OUTPUT     
+          cat $GITHUB_OUTPUT     
       - name: Check if Image Needs Updating
         uses: dorny/paths-filter@v2
         id: filter
         with:
-          base: ${{ steps.get-latest-image-tag.outputs.latest-image-tag }}
+          base: ${{ steps.get-latest-image-tag.outputs.latest-image-tag != 'null' && steps.get-latest-image-tag.outputs.latest-image-tag || github.ref }}
           filters: |
             app-path:
               - "${{inputs.app-path}}/**"  

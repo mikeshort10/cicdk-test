@@ -24,6 +24,7 @@ const $namespace = (repo: string, env: Environment) => {
 
 type StackTags = {
   Environment: Environment;
+  IACPlatform: "cdk" | "terraform" | "none";
 };
 
 const $tagResource = (stackTags: StackTags): TagResource => {
@@ -65,11 +66,11 @@ const lambdas = Object.entries(context.data.lambdas).map(
 const config: StackConfig = {
   environment: env,
   namespace: $namespace("cicdk-test", env),
-  tagResource: $tagResource({ Environment: env }),
+  tagResource: $tagResource({ Environment: env, IACPlatform: "cdk" }),
   lambdas: lambdas,
 };
 
-new TestCicdCdkStack(app, "TestCicdCdkStack", config, {
+new TestCicdCdkStack(app, ["TestCicdCdkStack", env].join("-"), config, {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */

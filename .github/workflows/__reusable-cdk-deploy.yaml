@@ -1,4 +1,4 @@
-name: CDK Deploy
+name: "Template: CDK Deploy"
 on:
   workflow_call:
     inputs:
@@ -30,7 +30,8 @@ jobs:
         token: ${{ secrets.GH_WRITE_TOKEN }}
     - uses: actions/setup-node@v3
       with: 
-        node-version: "18"
+        node-version: 18
+        cache: 'npm'
     - name: Install
       run: npm ci
     - name: Linting

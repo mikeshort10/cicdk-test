@@ -1,0 +1,17 @@
+name: Alpha ECR Build/Push and CDK Deploy
+on:
+  push:
+    branches:
+      - development
+jobs:
+  cdk-deploy:
+    uses: ./.github/workflows/_reusable-cicd.yaml
+    with:
+      environment: alpha
+    secrets:
+      AWS_ECR_ROLE: ${{ secrets.AWS_ECR_ROLE }}
+      GH_WRITE_TOKEN: ${{ secrets.GH_WRITE_TOKEN }}
+      AWS_CDK_DEPLOY_ROLE: ${{ secrets.AWS_CDK_DEPLOY_ROLE }}
+    permissions:
+      id-token: write
+      contents: read
