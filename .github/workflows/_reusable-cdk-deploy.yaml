@@ -1,7 +1,21 @@
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      environment:
+        description: "CDK Environment to deploy to"
+        type: string
+        required: true
+    secrets:
+      AWS_ECR_ROLE:
+        description: "Role for push/pull to ECR"
+        required: true
+      GH_WRITE_TOKEN:
+        description: "Role for writing to own repo"
+        required: true
+      AWS_CDK_DEPLOY_ROLE:
+        description: "Role for deploying CDK stacks"
+        required: true
+
 jobs:
   create-context-artifact:
     runs-on: ubuntu-latest
@@ -25,7 +39,7 @@ jobs:
         - ecr-repo-name: test-cicd-lambda-2
           app-path: ./lambdas/hello-second
     with:
-      environment: prod
+      environment: ${{ inputs.environment }}
       ecr-repo-name: ${{ matrix.ecr-repo-name }}
       app-path: ${{ matrix.app-path }}
     secrets:
@@ -34,7 +48,7 @@ jobs:
     needs: ecr-build-and-deploy
     uses: ./.github/workflows/_reusable-update-cdk-image-tag.yaml
     with:
-      environment: prod
+      environment: ${{ inputs.environment }}
     secrets:
       repo-write-token: ${{ secrets.GH_WRITE_TOKEN }}
   call-cicd:
@@ -46,6 +60,6 @@ jobs:
       id-token: write
       contents: read
     with:
-      environment: prod
+      environment: ${{ inputs.environment }}
     secrets:
       AWS_CDK_DEPLOY_ROLE: ${{ secrets.AWS_CDK_DEPLOY_ROLE }}

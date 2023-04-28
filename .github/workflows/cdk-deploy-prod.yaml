@@ -1,0 +1,13 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  cdk-deploy:
+    uses: ./.github/workflows/_reusable-cdk-deploy.yaml
+    with:
+      environment: prod
+    secrets:
+      AWS_ECR_ROLE: ${{ secrets.AWS_ECR_ROLE }}
+      GH_WRITE_TOKEN: ${{ secrets.GH_WRITE_TOKEN }}
+      AWS_CDK_DEPLOY_ROLE: ${{ secrets.AWS_CDK_DEPLOY_ROLE }}
