@@ -78,13 +78,16 @@ Note: The AWS Roles do not need to be stored as secrets and can be hardcoded int
     "Statement": [
       {
         "Effect": "Allow",
-        "Action": "*",
+        "Action": ["cloudformation:DescribeStacks", "ssm:GetParameter"],
         "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": ["sts:AssumeRole"],
+        "Resource": "arn:aws:iam::148276495017:role/cdk-*"
       }
     ]
   }
   ```
 
-  Note: these permissions are overly broad and should only be used as a starting point. If anyone gained access to your github repo, they could essentially deploying anything to your AWS cloud.
-
-  Your organization should enforce restrictions on any role to perform certain actions, like creating new users, as well as other steps the do not need to perform. You may want to further limit this policy depending on the kind of application that your CDK stack is deploying.
+  Note: We are adopting a policy of least privilege, and granting only the permissions that aws-cdk needs to deploy the stack at present. These permissions may need to be updated as the stack evolves.
