@@ -51,7 +51,7 @@ jobs:
     secrets:
       AWS_ECR_ROLE: ${{ secrets.AWS_ECR_ROLE }}
   call-cicd:
-    needs: [ecr-build-and-deploy, update-cdk-context]
+    needs: ecr-build-and-deploy
     uses: ./.github/workflows/__reusable-cicd-template.yaml
     # If the tag has been updated, it will have been committed in update-cdk-context, rerunning the job, so cancel this one
     if: ${{ needs.ecr-build-and-deploy.outputs.updated-tag == '' }}
