@@ -40,7 +40,7 @@ jobs:
         uses: dorny/paths-filter@v2
         id: filter
         with:
-          base: ${{ steps.get-latest-image-tag.outputs.latest-image-tag }}
+          base: ${{ steps.get-latest-image-tag.outputs.latest-image-tag || github.ref }}
           filters: |
             app-path:
               - "${{inputs.app-path}}/**"  
