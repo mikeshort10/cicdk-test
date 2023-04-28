@@ -9,9 +9,6 @@ on:
         description: "AWS Region that this CDK Stack should deploy to"
         type: string
         default: us-east-1
-      ecr-repo-name:
-        required: true
-        type: string
     secrets:
       AWS_CDK_DEPLOY_ROLE:
         description: "AWS role for GHA to deploy CDK"
@@ -42,7 +39,6 @@ jobs:
     - name: Synth and Deploy
       env:
         CDK_ENV: ${{ inputs.environment }}
-        LAMBDA_REPO_NAME: ${{ inputs.ecr-repo-name }}
       run: |
-       npm run cdk synth -- --context env=$CDK_ENV --context lambdaRepoName=$LAMBDA_REPO_NAME
-       npm run cdk deploy -- --require-approval=never --context env=$CDK_ENV --context lambdaRepoName=$LAMBDA_REPO_NAME
+       npm run cdk synth -- --context env=$CDK_ENV
+       npm run cdk deploy -- --require-approval=never --context env=$CDK_ENV 

@@ -35,7 +35,7 @@ export class TestCicdCdkStack extends cdk.Stack {
 
       const lambdaFunction = new lambda.DockerImageFunction(
         this,
-        config.namespace("lambda"),
+        config.namespace(lambdaConfig.repoName),
         {
           code: lambda.DockerImageCode.fromEcr(lambdaRepo, {
             tagOrDigest: lambdaConfig.tag,
