@@ -41,4 +41,4 @@ jobs:
         CDK_ENV: ${{ inputs.environment }}
       run: |
        npm run cdk synth -- --context env=$CDK_ENV
-       npm run cdk deploy -- --require-approval=never --context env=$CDK_ENV 
+       npm run cdk deploy -- --context env=$CDK_ENV --require-approval=never  

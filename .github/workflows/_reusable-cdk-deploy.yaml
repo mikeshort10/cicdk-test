@@ -27,7 +27,7 @@ jobs:
           path: cdk.json
   ecr-build-and-deploy: 
     needs: create-context-artifact
-    uses: ./.github/workflows/_reusable-ecr-build-and-push.yaml
+    uses: ./.github/workflows/__reusable-ecr-build-and-push.yaml
     permissions:
       id-token: write
       contents: read
@@ -46,14 +46,14 @@ jobs:
       AWS_ECR_ROLE: ${{ secrets.AWS_ECR_ROLE }}
   update-cdk-context:
     needs: ecr-build-and-deploy
-    uses: ./.github/workflows/_reusable-update-cdk-image-tag.yaml
+    uses: ./.github/workflows/__reusable-update-cdk-image-tag.yaml
     with:
       environment: ${{ inputs.environment }}
     secrets:
       repo-write-token: ${{ secrets.GH_WRITE_TOKEN }}
   call-cicd:
     needs: [ecr-build-and-deploy, update-cdk-context]
-    uses: ./.github/workflows/_reusable-cicd-template.yaml
+    uses: ./.github/workflows/__reusable-cicd-template.yaml
     # If the tag has been updated, it will have been committed in update-cdk-context, rerunning the job, so cancel this one
     if: ${{ needs.ecr-build-and-deploy.outputs.updated-tag == '' }}
     with:
