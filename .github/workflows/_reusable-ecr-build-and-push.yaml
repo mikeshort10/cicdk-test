@@ -41,7 +41,7 @@ jobs:
               - "${{inputs.app-path}}/**"  
       - name: Configure AWS Credentials
         if: steps.filter.outputs.app-path == 'true'
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_ECR_ROLE }}
           aws-region: ${{ inputs.region }}
