@@ -1,0 +1,43 @@
+on:
+  push:
+    branches:
+      - 'main'
+
+
+jobs:
+  create-artifact:
+    runs-on: ubuntu-latest
+    steps: 
+      - run: echo "Initial setup" >> artifact.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: artifact.txt
+          retention-days: 1
+  fast-read:
+    needs: create-artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with: 
+          name: artifact
+      - run: echo "Hello fast read" >> artifact.txt
+      - run: sleep 50
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: artifact.txt
+
+  slow-read:
+    needs: create-artifact
+    runs-on: ubuntu-latest
+    steps:
+      - run: sleep 20
+      - uses: actions/download-artifact@v3
+        with: 
+          name: artifact
+      - run: echo "Hello slow read" >> artifact.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: artifact.txt
