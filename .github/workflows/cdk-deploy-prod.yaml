@@ -1,3 +1,4 @@
+name: Production ECR Build/Push and CDK Deploy
 on:
   push:
     branches:

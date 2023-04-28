@@ -1,3 +1,4 @@
+name: Commit Updated cdk.json
 on: 
   workflow_call:
     inputs:
