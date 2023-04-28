@@ -42,6 +42,8 @@ jobs:
           app-path: ./lambdas/hello-world
         - ecr-repo-name: test-cicd-lambda-2
           app-path: ./lambdas/hello-second
+        - ecr-repo-name: test-cicd-lambda-3
+          app-path: ./lambdas/hello-third
     with:
       environment: ${{ inputs.environment }}
       ecr-repo-name: ${{ matrix.ecr-repo-name }}
