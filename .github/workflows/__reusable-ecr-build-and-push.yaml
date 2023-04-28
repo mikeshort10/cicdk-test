@@ -68,7 +68,7 @@ jobs:
           docker push --all-tags $REGISTRY/$REPOSITORY
           echo "updated-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
       - name: Update CDK context
-        if: ${{ steps.build-and-push.outputs.updated-tag }}
+        if: steps.filter.outputs.app-path == 'true'
         env:
           CDK_ENV: ${{ inputs.environment }}
           REPO_NAME: ${{ inputs.ecr-repo-name }}
@@ -76,6 +76,7 @@ jobs:
         run: |
           echo "$( jq '.context[$CDK_ENV].lambdas[$REPO_NAME].tag = $UPDATED_TAG' --arg CDK_ENV "$CDK_ENV" --arg REPO_NAME "$REPO_NAME" --arg UPDATED_TAG "$UPDATED_TAG" cdk.json )" > cdk.json 
       - name: Upload Context
+        if: steps.filter.outputs.app-path == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: context
