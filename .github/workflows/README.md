@@ -84,7 +84,7 @@ Note: The AWS Roles do not need to be stored as secrets and can be hardcoded int
       {
         "Effect": "Allow",
         "Action": ["sts:AssumeRole"],
-        "Resource": "arn:aws:iam::148276495017:role/cdk-*"
+        "Resource": "arn:aws:iam::$AWS_ACCOUNT_ID:role/cdk-*"
       }
     ]
   }

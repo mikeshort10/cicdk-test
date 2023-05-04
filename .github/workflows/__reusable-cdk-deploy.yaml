@@ -68,6 +68,7 @@ jobs:
       if: steps.filter.outputs.new-context != 'true'
       env:
         CDK_ENV: ${{ inputs.environment }}
+        GIT_BRANCH: ${{ github.ref_name }}
       run: |
-       npm run cdk synth -- --context env=$CDK_ENV
-       npm run cdk deploy -- --context env=$CDK_ENV --require-approval=never  
+       npm run cdk synth -- --context env=$CDK_ENV --context gitBranch=$GIT_BRANCH
+       npm run cdk deploy -- --context env=$CDK_ENV --context gitBranch=$GIT_BRANCH --require-approval=never  
