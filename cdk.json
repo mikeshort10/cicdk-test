@@ -1,7 +1,9 @@
 {
   "app": "npx ts-node --prefer-ts-exts bin/test-cicd-cdk.ts",
   "watch": {
-    "include": ["**"],
+    "include": [
+      "**"
+    ],
     "exclude": [
       "README.md",
       "cdk*.json",
@@ -17,7 +19,10 @@
   "context": {
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
-    "@aws-cdk/core:target-partitions": ["aws", "aws-cn"],
+    "@aws-cdk/core:target-partitions": [
+      "aws",
+      "aws-cn"
+    ],
     "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
     "@aws-cdk/aws-ec2:uniqueImdsv2TemplateName": true,
     "@aws-cdk/aws-ecs:arnFormatIncludesClusterName": true,
@@ -42,7 +47,6 @@
     "@aws-cdk/aws-secretsmanager:useAttachedSecretResourcePolicyForSecretTargetAttachments": true,
     "@aws-cdk/aws-redshift:columnId": true,
     "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true,
-
     "alpha": {
       "lambdas": {
         "test-cicd-lambda": {
@@ -56,14 +60,13 @@
         }
       }
     },
-
     "prod": {
       "lambdas": {
         "test-cicd-lambda": {
           "tag": "aff19271f7aaf3aeaaf706fa1f18e53eece21320"
         },
         "test-cicd-lambda-2": {
-          "tag": "01951ba3bf716aaaff6d2afb9912abe40a8f8f7d"
+          "tag": "5cb6ad4728360fbca4f01752469de33ceb537528"
         },
         "test-cicd-lambda-3": {
           "tag": "ff8e2d597d9e1b00c1133f2242af42fa8dabef0a"
