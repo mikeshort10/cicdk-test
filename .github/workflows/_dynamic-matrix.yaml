@@ -6,10 +6,10 @@ on:
 
 jobs:
   dynamic-matrix:
-    # strategy:
-    #   matrix: ${{ fromJson(inputs.matrix) }}
+    strategy:
+      matrix:  ${{ fromJSON(inputs.matrix) }}
     runs-on: ubuntu-latest
-    env:
-      value: ${{ fromJSON(inputs.matrix) }}
+    # env:
+    #   value: ${{ fromJSON(inputs.matrix) }}
     steps: 
       - run: echo $value
