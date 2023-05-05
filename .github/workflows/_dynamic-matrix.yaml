@@ -10,6 +10,6 @@ jobs:
     #   matrix: ${{ fromJson(inputs.matrix) }}
     runs-on: ubuntu-latest
     env:
-      value: ${{ inputs.matrix }}
+      value: ${{ fromJSON(inputs.matrix) }}
     steps: 
       - run: echo $value
