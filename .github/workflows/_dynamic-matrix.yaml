@@ -1,0 +1,15 @@
+on:
+  workflow_call:
+    inputs:
+      matrix:
+        type: string
+
+jobs:
+  dynamic-matrix:
+    strategy:
+      matrix: ${{ fromJson(inputs.matrix) }}
+    runs-on: ubuntu-latest
+    env:
+      value: ${{ matrix }}
+    steps: 
+      - run: echo $value
