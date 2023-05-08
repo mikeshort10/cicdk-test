@@ -12,6 +12,7 @@ jobs:
     steps:
       - id: read-config
         run: |
+          ls
           echo "config=$(jq -r . ./.github/workflows/projects.json)" >> $GITHUB_OUTPUT
           cat $GITHUB_OUTPUT
   dynamic-matrix:
