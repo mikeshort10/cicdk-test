@@ -11,7 +11,9 @@ jobs:
       config: ${{ steps.read-config.outputs.config }}
     steps:
       - id: read-config
-        run: echo "config=$(jq -r . ./.github/workflows/projects.json)" >> $GITHUB_OUTPUT
+        run: |
+          echo "config=$(jq -r . ./.github/workflows/projects.json)" >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
   dynamic-matrix:
     needs: get-config
     strategy:
