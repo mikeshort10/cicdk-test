@@ -7,7 +7,7 @@ on:
 jobs:
   dynamic-matrix:
     strategy:
-      matrix:  ${{ fromJSON('{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}']}) }}
+      matrix:  ${{ fromJSON(inputs.matrix) }}
     runs-on: ubuntu-latest
     # env:
     #   value: ${{ fromJSON(inputs.matrix) }}
