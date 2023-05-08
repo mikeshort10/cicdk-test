@@ -1,7 +1,7 @@
 on:
   workflow_call:
     inputs:
-      matrix:
+      matrix-file:
         type: string
 
 jobs:
@@ -12,9 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3  
       - id: read-config
+        env: 
+          MATRIX_FILE: ${{ inputs.matrix-file }}
         run: |
           ls
-          echo "config=$(jq -c . ./.github/workflows/projects.json)" >> $GITHUB_OUTPUT
+          echo "config=$(jq -c . $MATRIX_FILE)" >> $GITHUB_OUTPUT
           cat $GITHUB_OUTPUT
   dynamic-matrix:
     needs: get-config
