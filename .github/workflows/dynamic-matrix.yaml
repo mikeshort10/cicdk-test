@@ -7,4 +7,4 @@ jobs:
   dynamic-matrix:
     uses: ./.github/workflows/_dynamic-matrix.yaml
     with:
-      matrix: 'jq -r . ./.github/workflows/projects.json'
+      matrix: ${{ jq -r . ./.github/workflows/projects.json }}
