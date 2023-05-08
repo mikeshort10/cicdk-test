@@ -7,4 +7,4 @@ jobs:
   dynamic-matrix:
     uses: ./.github/workflows/_dynamic-matrix.yaml
     with:
-      matrix: '["hello", "world"]'
+      matrix: '{"parameters":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}'
