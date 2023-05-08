@@ -7,7 +7,7 @@ on:
 jobs:
   dynamic-matrix:
     strategy:
-      matrix:  ${{ fromJSON(inputs.matrix).values }}
+      matrix:  ${{ fromJSON(inputs.matrix).parameters }}
     runs-on: ubuntu-latest
     env:
       value: ${{ matrix.project }}
