@@ -5,9 +5,18 @@ on:
         type: string
 
 jobs:
+  get-config:
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.read-config.outputs.config }}
+    steps:
+      - id: read-config
+        run: |
+          echo "config=$(jq -r . ./.github/workflows/projects.json)" >> $GITHUB_OUTPUT
   dynamic-matrix:
+    needs: get-config
     strategy:
-      matrix:  ${{ fromJSON(inputs.matrix) }}
+      matrix:  ${{ fromJSON(needs.get-config.outputs.config) }}
     runs-on: ubuntu-latest
     steps: 
       - run: echo $value
