@@ -1,0 +1,29 @@
+on:
+  workflow_call:
+    inputs:
+      matrix-file:
+        type: string
+
+jobs:
+  get-config:
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.read-config.outputs.config }}
+    steps:
+      - uses: actions/checkout@v3  
+      - id: read-config
+        env: 
+          MATRIX_FILE: ${{ inputs.matrix-file }}
+        run: |
+          ls
+          echo "config=$(jq -c . $MATRIX_FILE)" >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
+  dynamic-matrix:
+    needs: get-config
+    strategy:
+      matrix:  ${{ fromJSON(needs.get-config.outputs.config) }}
+    runs-on: ubuntu-latest
+    steps: 
+      - run: echo $value
+        env:
+          value: ${{ matrix.project }}
