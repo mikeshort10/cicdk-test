@@ -22,6 +22,7 @@ Note: The AWS Roles do not need to be stored as secrets and can be hardcoded int
 
 - AWS_ECR_ROLE
   Needs the following policy:
+
   ```json
   {
     "Version": "2012-10-17",
@@ -65,8 +66,6 @@ Note: The AWS Roles do not need to be stored as secrets and can be hardcoded int
     ]
   }
   ```
-- GH_WRITE_TOKEN
-  A Personal Access Token (PAT) for GitHub with the `repo` scope. This will be used to commit image tags to the repo.
 
 - AWS_CDK_DEPLOY_ROLE
 
@@ -84,10 +83,23 @@ Note: The AWS Roles do not need to be stored as secrets and can be hardcoded int
       {
         "Effect": "Allow",
         "Action": ["sts:AssumeRole"],
-        "Resource": "arn:aws:iam::148276495017:role/cdk-*"
+        "Resource": "arn:aws:iam::$AWS_ACCOUNT_ID:role/cdk-*"
       }
     ]
   }
   ```
+
+- GH_WRITE_TOKEN
+
+  - For Fine-grained Access Tokens (Recommended):
+
+    - Repository Access: Only select repositories (Select current repo, e.g. mikeshort10/test-cicdk)
+
+    - Permissions:
+      - Contents: Read and write (for pulling/pushing to repo)
+
+  - For Classic Personal Access Tokens:
+    - scopes:
+      - `repo`
 
   Note: We are adopting a policy of least privilege, and granting only the permissions that aws-cdk needs to deploy the stack at present. These permissions may need to be updated as the stack evolves.

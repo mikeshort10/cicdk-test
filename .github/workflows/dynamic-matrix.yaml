@@ -1,0 +1,10 @@
+on:
+  push:
+    branches:
+      - ci/dynamic-matrix
+
+jobs:
+  dynamic-matrix:
+    uses: ./.github/workflows/_dynamic-matrix.yaml
+    with:
+      matrix-file: './.github/workflows/projects.json'
